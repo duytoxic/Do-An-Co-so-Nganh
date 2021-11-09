@@ -1,5 +1,5 @@
-import React, {useEffect, useContext} from 'react';
-import {View, StatusBar, ScrollView, StyleSheet} from 'react-native';
+import React, {useContext} from 'react';
+import {StatusBar, ScrollView, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/core';
 
@@ -8,19 +8,14 @@ import SearchBox from '../../components/common/SearchBox';
 import Slides from '../../components/home/Slides';
 import RecomendListPreview from '../../components/home/RecommendListPreview';
 import Button from '../../components/common/Button';
-import {AuthContext} from '../../navigations/AuthProvider';
+import {AuthContext} from '../../context/AuthContext';
 
 // screens
 import LoadingScreen from '../../screens/another/LoadingScreen';
 
-import {
-  PRIMARY_COLOR,
-  BLACK_COLOR_1,
-  GRAY_COLOR_1,
-  WHITE_COLOR,
-} from '../../theme/colors';
+import {PRIMARY_COLOR, WHITE_COLOR} from '../../theme/colors';
 
-import {BASE, MAIN_PADDING} from '../../theme/sizes';
+import {BASE} from '../../theme/sizes';
 
 function HomeScreen({}) {
   const navigation = useNavigation();
@@ -63,7 +58,7 @@ function HomeScreen({}) {
     },
   ];
   const {logout} = useContext(AuthContext);
-  const {user} = useContext(AuthContext);
+
   return (
     <>
       <StatusBar

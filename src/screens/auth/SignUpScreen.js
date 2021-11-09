@@ -22,7 +22,7 @@ import {BASE, MAIN_PADDING} from '../../theme/sizes';
 
 import {useNavigation} from '@react-navigation/core';
 import {Formik} from 'formik';
-import {AuthContext} from '../../navigations/AuthProvider';
+import {AuthContext} from '../../context/AuthContext';
 
 // Define icons
 const icons = {

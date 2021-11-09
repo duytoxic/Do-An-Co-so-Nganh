@@ -5,7 +5,6 @@ import {
   ScrollView,
   StyleSheet,
   KeyboardAvoidingView,
-  Alert,
 } from 'react-native';
 //import components
 import AuthHeader from '../../components/auth/AuthHeader';
@@ -16,7 +15,7 @@ import Button from '../../components/common/Button';
 import PressableWrapper from '../../components/common/PressableWrapper';
 import Hr from '../../components/common/Hr';
 import ButtonLoginSocial from '../../components/common/ButtonLoginSocial';
-import {AuthContext} from '../../navigations/AuthProvider';
+import {AuthContext} from '../../context/AuthContext';
 //import screen name
 import {SIGN_UP_SCREEN} from '../../navigations/screenName';
 //import variables color
@@ -26,7 +25,6 @@ import {BASE, MAIN_PADDING} from '../../theme/sizes';
 
 import {useNavigation} from '@react-navigation/core';
 import {Formik} from 'formik';
-import auth from '@react-native-firebase/auth';
 
 // Define icons
 const icons = {
@@ -76,17 +74,6 @@ function SignInScreen() {
   const [showPassWord, setShowPassWord] = useState(false);
   const navigation = useNavigation();
 
-  async function signIn(data) {
-    try {
-      const {email, password} = data;
-      const user = await auth().signInWithEmailAndPassword(email, password);
-      if (user) {
-        console.log('USER SIGNED IN');
-      }
-    } catch (error) {
-      Alert.alert(error.name, error.message);
-    }
-  }
   const {login} = useContext(AuthContext);
 
   return (

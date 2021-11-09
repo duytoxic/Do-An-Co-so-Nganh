@@ -10,7 +10,7 @@ import {SafeAreaProvider} from 'react-native-safe-area-context';
 
 // navigators
 import {navigationRef} from './navigationServices';
-import {AuthProvider} from './AuthProvider';
+import {AuthProvider} from '../context/AuthContext';
 import Routes from './Routes';
 
 function Navigation() {

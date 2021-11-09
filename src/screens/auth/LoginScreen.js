@@ -13,7 +13,7 @@ import SafeAreaContainer from '../../components/common/SafeAreaContainer';
 import Button from '../../components/common/Button';
 import PressableWrapper from '../../components/common/PressableWrapper';
 import AuthBanner from '../../components/auth/AuthBanner';
-import {AuthContext} from '../../navigations/AuthProvider';
+import {AuthContext} from '../../context/AuthContext';
 
 //import screen name
 import {SIGN_UP_SCREEN} from '../../navigations/screenName';

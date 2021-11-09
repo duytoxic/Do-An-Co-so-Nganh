@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import auth from '@react-native-firebase/auth';
-import {AuthContext} from './AuthProvider';
+import {AuthContext} from '../context/AuthContext';
 import AuthNavigator from './AuthNavigator';
 import BottomMainNavigator from './BottomMainNavigator';
 import LoadingScreen from '../screens/another/LoadingScreen';
