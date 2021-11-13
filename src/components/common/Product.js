@@ -50,7 +50,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     flex: 1,
     flexDirection: 'column',
-    // marginRight: BASE * 2,
   },
   header: {
     flex: 5,

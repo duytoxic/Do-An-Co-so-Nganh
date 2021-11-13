@@ -1,45 +1,20 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet} from 'react-native';
+import axios from 'axios';
+import {useDispatch, useSelector} from 'react-redux';
+
 import {
-  View,
-  Text,
-  StatusBar,
-  StyleSheet,
-  ScrollView,
-  TextInput,
-  TouchableOpacity,
-} from 'react-native';
+  getListCategories,
+  selectListCategories,
+} from '../../reducers/categories';
 
 import SafeAreaContainer from '../../components/common/SafeAreaContainer';
 import SearchBox from '../../components/common/SearchBox';
 import TitlePage from '../../components/product/TitlePage';
-import Icon from '../../components/common/Icon';
+import CategoriesListPreview from '../../components/product/CategoriesListPreview';
 
-import {
-  PRIMARY_COLOR,
-  BLACK_COLOR_1,
-  GRAY_COLOR_1,
-  GRAY_COLOR_2,
-  WHITE_COLOR,
-} from '../../theme/colors';
-import {BASE, MAIN_PADDING} from '../../theme/sizes';
-
-const DEFAULT_DATA = [
-  {
-    title: 'Fresh Vegetables',
-    subTitle: 'Get Up to 40% OFF',
-    imageSource: require('../../../assets/images/product/red-apple-2x.png'),
-  },
-  {
-    title: 'Tiêu đề quảng cáo',
-    subTitle: 'Get Up to 40% OFF',
-    imageSource: require('../../../assets/images/product/red-apple-2x.png'),
-  },
-  {
-    title: 'Fresh Vegetables',
-    subTitle: 'Nội dung quảng cáo',
-    imageSource: require('../../../assets/images/intro/health-img.jpg'),
-  },
-];
+import {WHITE_COLOR} from '../../theme/colors';
+import {MAIN_PADDING} from '../../theme/sizes';
 
 const icons = {
   marker: {
@@ -64,14 +39,61 @@ const icons = {
   },
 };
 
+const data = [
+  {
+    name: 'Fresh Fruits & Vegetable',
+    imageURL: require('../../../assets/images/categories/categories-food-1.png'),
+  },
+  {
+    name: 'Cooking Oil',
+    imageURL: require('../../../assets/images/product/test-product.png'),
+  },
+  {
+    name: 'Cooking Oil',
+    imageURL: require('../../../assets/images/product/test-product.png'),
+  },
+  {
+    name: 'Cooking Oil',
+    imageURL: require('../../../assets/images/product/test-product.png'),
+  },
+  {
+    name: 'Cooking Oil',
+    imageURL: require('../../../assets/images/product/test-product.png'),
+  },
+  {
+    name: 'Cooking Oil',
+    imageURL: require('../../../assets/images/product/test-product.png'),
+  },
+  {
+    name: 'Cooking Oil',
+    imageURL: require('../../../assets/images/product/test-product.png'),
+  },
+  {
+    name: 'Cooking Oil',
+    imageURL: require('../../../assets/images/product/test-product.png'),
+  },
+  {
+    name: 'Cooking Oil',
+    imageURL: require('../../../assets/images/product/test-product.png'),
+  },
+];
+
 function ShopScreen() {
+  const dispatch = useDispatch();
+  const listCategories = useSelector(selectListCategories);
+  console.log(listCategories);
+
+  useEffect(() => {
+    dispatch(getListCategories());
+  }, [dispatch]);
+
   return (
     <>
       <SafeAreaContainer style={styles.container}>
         <TitlePage
           title="Cửa hàng"
-          leftIcon={icons.marker}
-          rightIcon={icons.search}
+          // leftIcon={icons.marker}
+          // rightIcon={icons.search}
         />
         <SearchBox
           iconLeft={icons.search}
@@ -79,6 +101,7 @@ function ShopScreen() {
           placeholder="Tìm kiếm"
           style={styles.widthSearchBox}
         />
+        <CategoriesListPreview items={listCategories} />
       </SafeAreaContainer>
     </>
   );

@@ -45,6 +45,11 @@ export const PRODUCT_DETAIL = 'product-detail';
 export const SHOP_SCREEN = 'shop';
 
 /**
+ * Màn hình tìm kiếm sản phẩm
+ */
+export const PRODUCT_SCREEN = 'product';
+
+/**
  * Màn hình giỏ hàng
  */
 export const CART_SCREEN = 'cart';

@@ -7,18 +7,20 @@
  */
 
 import React from 'react';
-import {StyleSheet, Text, View, StatusBar} from 'react-native';
-import HomeScreen from './src/screens/home/HomeScreen';
-import SignInScreen from './src/screens/auth/SignInScreen';
-import Navigation from './src/navigations';
+import {StyleSheet} from 'react-native';
+import {Provider} from 'react-redux';
 
-import {colors} from './src/global/styles';
+// Redux
+import store from './src/config/store';
+
+import Navigation from './src/navigations';
 
 const App = () => {
   return (
     <>
-      <Navigation />
-      {/* <SignInScreen /> */}
+      <Provider store={store}>
+        <Navigation />
+      </Provider>
     </>
   );
 };

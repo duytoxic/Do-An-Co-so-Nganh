@@ -14,19 +14,20 @@ const icons = {
   },
 };
 
-function TitlePage({leftIcon = null, title, rightIcon = null, style}) {
+function TitlePage({leftIcon: LeftComp, title, rightIcon = null, style}) {
   return (
     <>
       <View style={[styles.container, style]}>
         <View style={styles.left}>
-          {leftIcon && (
+          {/* {leftIcon && (
             <Icon
               type={leftIcon.type}
               name={leftIcon.name}
               size={leftIcon.size}
               style={styles.iconColor}
             />
-          )}
+          )} */}
+          {LeftComp && <LeftComp />}
         </View>
 
         <View style={styles.titlePage}>

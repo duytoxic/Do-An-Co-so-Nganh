@@ -15,7 +15,7 @@ import LoadingScreen from '../../screens/another/LoadingScreen';
 
 import {PRIMARY_COLOR, WHITE_COLOR} from '../../theme/colors';
 
-import {BASE} from '../../theme/sizes';
+import {BASE, MAIN_PADDING} from '../../theme/sizes';
 
 function HomeScreen({}) {
   const navigation = useNavigation();
@@ -94,7 +94,7 @@ function HomeScreen({}) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: BASE * 2,
+    paddingHorizontal: MAIN_PADDING,
     backgroundColor: WHITE_COLOR,
   },
   title: {

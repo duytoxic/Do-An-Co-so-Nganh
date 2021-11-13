@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     // paddingHorizontal: Platform.OS === 'android' ? 20 : 0,
   },
   layoutProductHorizontal: {
-    marginRight: BASE * 1.5,
+    marginRight: BASE * 2,
   },
 });
 
