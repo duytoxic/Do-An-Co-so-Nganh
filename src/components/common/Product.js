@@ -14,7 +14,7 @@ import ButtonAdd from './ButtonAdd';
 
 import {useNavigation} from '@react-navigation/core';
 
-function Product({imageURL, name, weight, price, style}) {
+function Product({imageURL, name, weight, price, style, desc, id}) {
   const navigation = useNavigation();
   // let percent = `${(progess * 100) / total}%`;
   return (
@@ -32,7 +32,17 @@ function Product({imageURL, name, weight, price, style}) {
         </View>
         <View style={styles.bottom}>
           <Text style={styles.price}>{price} VND</Text>
-          <ButtonAdd onPress={() => navigation.navigate(PRODUCT_DETAIL)} />
+          <ButtonAdd
+            onPress={() =>
+              navigation.navigate(PRODUCT_DETAIL, {
+                productId: id,
+                productName: name,
+                productPrice: price,
+                productWeight: weight,
+                productDesc: desc,
+              })
+            }
+          />
         </View>
       </View>
     </View>
@@ -57,7 +67,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   image: {
-    resizeMode: 'cover',
+    resizeMode: 'contain',
+    height: 80,
+    width: 100,
   },
   content: {
     flex: 5,

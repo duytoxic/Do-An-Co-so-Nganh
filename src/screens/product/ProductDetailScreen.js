@@ -9,6 +9,8 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
+import {useNavigation} from '@react-navigation/core';
+
 import SafeAreaContainer from '../../components/common/SafeAreaContainer';
 import ButtonBack from '../../components/common/ButtonBack';
 import SlidesProductDetail from '../../components/product/SlidesProductDetail';
@@ -18,6 +20,9 @@ import Button from '../../components/common/Button';
 import MyText from '../../components/common/MyText';
 
 import LeftRightLayout from '../../layouts/LeftRightLayout';
+
+import {useDispatch} from 'react-redux';
+import {InCreaseQuantity} from '../../reducers/cart';
 
 const icons = {
   heart: {
@@ -64,7 +69,32 @@ const DEFAULT_DATA = [
   },
 ];
 
-function ProductDetail() {
+const product = {
+  id: 9,
+  name: 'Red Apple',
+  price: 50000,
+  weight: '1kg',
+  quantity: 2,
+};
+function ProductDetailScreen({route}) {
+  const productInfo = {
+    id: route.params.productId,
+    name: route.params.productName,
+    price: route.params.productPrice,
+    weight: route.params.productWeight,
+    desc: route.params.productDesc,
+    quantity: 1,
+  };
+  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const selectItem = item => {
+    navigation.goBack();
+    dispatch({
+      type: 'cart/addToCart',
+      payload: {...item},
+    });
+  };
+
   return (
     <>
       <StatusBar
@@ -72,40 +102,39 @@ function ProductDetail() {
         backgroundColor={GRAY_COLOR_2}
         barStyle={'dark-content'}
       />
-      <SafeAreaContainer>
+      <SafeAreaContainer style={styles.container}>
         <View style={styles.productHeader}>
           <ButtonBack />
           <SlidesProductDetail slidesData={DEFAULT_DATA} />
         </View>
         <ScrollView style={styles.productContent}>
           <View style={styles.productTitle}>
-            <Text style={styles.productName}>name Product</Text>
+            <Text style={styles.productName}>{productInfo.name}</Text>
             <Icon {...icons.heart} style={styles.iconHeart} />
           </View>
-          <Text style={styles.weight}>1kg, Price</Text>
+          <Text style={styles.weight}>{productInfo.weight}</Text>
 
           <View style={styles.productPrice}>
             <View style={styles.selectNumber}>
               <TouchableOpacity activeOpacity={0.6}>
                 <Icon {...icons.dec} style={styles.dec} />
               </TouchableOpacity>
-              {/* <View style={styles.number}>
-                <Text style={styles.numberText}>1</Text>
-              </View> */}
+
               <TextInput
                 underlineColorAndroid="transparent"
                 keyboardType="numeric"
-                // value={item.quantity.toString()}
-                value="1"
+                value={productInfo.quantity.toString()}
                 editable={false}
                 style={styles.quantity}
               />
 
-              <TouchableOpacity activeOpacity={0.6}>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => dispatch(InCreaseQuantity(product.id))}>
                 <Icon {...icons.inc} style={styles.inc} />
               </TouchableOpacity>
             </View>
-            <Text style={styles.price}>100000 VND</Text>
+            <Text style={styles.price}>{productInfo.price} VND</Text>
           </View>
           <Hr />
           <LeftRightLayout
@@ -114,11 +143,13 @@ function ProductDetail() {
             }}
             // rightComp
           />
+          <Text>{productInfo.desc}</Text>
 
           <Button
             title="Thêm vào giỏ hàng"
             textTransform="uppercase"
             color={PRIMARY_COLOR}
+            onPress={() => selectItem(productInfo)}
           />
         </ScrollView>
       </SafeAreaContainer>
@@ -127,6 +158,9 @@ function ProductDetail() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    backgroundColor: WHITE_COLOR,
+  },
   productHeader: {
     paddingHorizontal: MAIN_PADDING,
     paddingTop: BASE,
@@ -208,4 +242,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProductDetail;
+export default ProductDetailScreen;

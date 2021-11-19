@@ -15,6 +15,7 @@ const getRandomColor = () => {
 };
 
 function CategoriesListPreview({items}) {
+  // console.log(items);
   const navigation = useNavigation();
   return (
     <>
@@ -25,7 +26,6 @@ function CategoriesListPreview({items}) {
           columnWrapperStyle={styles.wrapper}
           showsVerticalScrollIndicator={false}
           renderItem={({item, index}) => {
-            // console.log(item);
             return (
               <TouchableOpacity
                 onPress={() =>

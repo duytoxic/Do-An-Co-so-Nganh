@@ -30,10 +30,12 @@ function RecommendListPreview({listProductRecommend}) {
           listProductRecommend.map((item, id) => (
             <Product
               key={id}
+              id={id}
               name={item.name}
               weight={item.weight}
               price={item.price}
               imageURL={item.imageURL}
+              desc={item.desc}
               style={styles.layoutProductHorizontal}
             />
           ))}

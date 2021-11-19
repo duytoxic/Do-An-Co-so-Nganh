@@ -11,11 +11,10 @@ import Button from '../../components/common/Button';
 import {AuthContext} from '../../context/AuthContext';
 
 // screens
-import LoadingScreen from '../../screens/another/LoadingScreen';
 
 import {PRIMARY_COLOR, WHITE_COLOR} from '../../theme/colors';
 
-import {BASE, MAIN_PADDING} from '../../theme/sizes';
+import {MAIN_PADDING} from '../../theme/sizes';
 
 function HomeScreen({}) {
   const navigation = useNavigation();
@@ -45,16 +44,20 @@ function HomeScreen({}) {
 
   const DATA = [
     {
-      name: 'Orenge Juice',
-      weight: 1,
-      price: 50000,
-      imageURL: require('../../../assets/images/product/test-product.png'),
+      id: 3,
+      name: 'Organic Bananas',
+      weight: '0.5kg',
+      price: 20000,
+      imageURL: require('../../../assets/images/product/test-product_1.png'),
+      desc: 'Đây là một túi táo đỏ',
     },
     {
+      id: 9,
       name: 'Red Apple',
-      weight: 1,
+      weight: '1kg',
       price: 500000,
       imageURL: require('../../../assets/images/product/test-product.png'),
+      desc: 'Đây là một túi táo đỏ',
     },
   ];
   const {logout} = useContext(AuthContext);

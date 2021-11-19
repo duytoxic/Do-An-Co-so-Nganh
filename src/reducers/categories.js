@@ -15,7 +15,7 @@ export const getListCategories = () => {
         {
           id: curVal.id,
           name: curVal.name,
-          imageURL: curVal.imageURL,
+          imageURL: curVal.image,
         },
       ];
     }, []);

@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, Image} from 'react-native';
 
 import {BLACK_COLOR_1} from '../../theme/colors';
 
-function PostListPreview({name, imageURL, index}) {
+function CategoryItem({name, imageURL, index}) {
   return (
     <View style={[styles.container, index % 2 === 0 ? 'left' : 'right']}>
       <View style={styles.imageContainer}>
@@ -53,4 +53,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PostListPreview;
+export default CategoryItem;

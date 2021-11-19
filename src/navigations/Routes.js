@@ -28,5 +28,10 @@ export default function Routes() {
     return <LoadingScreen />;
   }
 
-  return <>{isAuth ? <BottomMainNavigator /> : <AuthNavigator />}</>;
+  // return <>{isAuth ? <BottomMainNavigator /> : <AuthNavigator />}</>;
+  return (
+    <>
+      <BottomMainNavigator />
+    </>
+  );
 }

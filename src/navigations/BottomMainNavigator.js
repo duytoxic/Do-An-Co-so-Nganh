@@ -11,6 +11,7 @@ import HomeNavigatior from './HomeNavigator';
 
 //screens
 import ShopScreen from '../screens/product/ShopScreen';
+import CartScreen from '../screens/cart/CartScreen';
 
 import {
   MAIN_SCREEN,
@@ -19,16 +20,6 @@ import {
   FAVOURITE_SCREEN,
   ACCOUNT_SCREEN,
 } from './screenName';
-
-const CartScreen = () => {
-  return (
-    <>
-      <SafeAreaContainer>
-        <Text>cart screen</Text>
-      </SafeAreaContainer>
-    </>
-  );
-};
 
 const FavouriteScreen = () => {
   return (

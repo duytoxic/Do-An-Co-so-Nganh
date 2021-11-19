@@ -1,6 +1,5 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
-import axios from 'axios';
 import {useDispatch, useSelector} from 'react-redux';
 
 import {
@@ -39,49 +38,9 @@ const icons = {
   },
 };
 
-const data = [
-  {
-    name: 'Fresh Fruits & Vegetable',
-    imageURL: require('../../../assets/images/categories/categories-food-1.png'),
-  },
-  {
-    name: 'Cooking Oil',
-    imageURL: require('../../../assets/images/product/test-product.png'),
-  },
-  {
-    name: 'Cooking Oil',
-    imageURL: require('../../../assets/images/product/test-product.png'),
-  },
-  {
-    name: 'Cooking Oil',
-    imageURL: require('../../../assets/images/product/test-product.png'),
-  },
-  {
-    name: 'Cooking Oil',
-    imageURL: require('../../../assets/images/product/test-product.png'),
-  },
-  {
-    name: 'Cooking Oil',
-    imageURL: require('../../../assets/images/product/test-product.png'),
-  },
-  {
-    name: 'Cooking Oil',
-    imageURL: require('../../../assets/images/product/test-product.png'),
-  },
-  {
-    name: 'Cooking Oil',
-    imageURL: require('../../../assets/images/product/test-product.png'),
-  },
-  {
-    name: 'Cooking Oil',
-    imageURL: require('../../../assets/images/product/test-product.png'),
-  },
-];
-
 function ShopScreen() {
   const dispatch = useDispatch();
   const listCategories = useSelector(selectListCategories);
-  console.log(listCategories);
 
   useEffect(() => {
     dispatch(getListCategories());

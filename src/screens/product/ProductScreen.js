@@ -37,8 +37,7 @@ const DATA = [
   },
 ];
 
-function ShopScreen({routes}) {
-  console.log(routes);
+function ProductScreen({routes}) {
   return (
     <>
       <SafeAreaContainer style={styles.container}>
@@ -56,6 +55,7 @@ function ShopScreen({routes}) {
         <FlatList
           numColumns={3}
           data={DATA}
+          columnWrapperStyle={styles.wrapper}
           showsVerticalScrollIndicator={false}
           renderItem={({item, index}) => {
             return <Product index={index} />;
@@ -74,4 +74,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ShopScreen;
+export default ProductScreen;
