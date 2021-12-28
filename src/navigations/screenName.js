@@ -63,3 +63,23 @@ export const FAVOURITE_SCREEN = 'favourite_product';
  * Màn hình tài khoản cá nhân
  */
 export const ACCOUNT_SCREEN = 'account';
+
+/**
+ * Màn hình đặt hàng thành công
+ */
+export const ORDER_COMPLETED_SCREEN = 'order_completed';
+
+/**
+ * Màn hình lịch sử đơn hàng
+ */
+export const ORDER_HISTORY_SCREEN = 'order_history';
+
+/**
+ * Màn hình account navigator
+ */
+export const ACCOUNT_NAVIGATOR_SCREEN = 'account_navigator';
+
+/**
+ * Màn hình cart navigator
+ */
+export const CART_NAVIGATOR_SCREEN = 'cart_navigator';

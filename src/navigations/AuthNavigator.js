@@ -27,7 +27,7 @@ function AuthNavigator() {
         screenOptions={{
           ...HIDDEN_HEADER,
           ...BACKGROUND_COLOR,
-          ...TransitionPresets.SlideFromRightIOS,
+          // ...TransitionPresets.SlideFromRightIOS,
         }}>
         <Stack.Screen name={ONBORDING_SCREEN} component={OnBordingScreen} />
         <Stack.Screen name={LOGIN_SCREEN} component={LoginScreen} />

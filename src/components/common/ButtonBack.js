@@ -5,6 +5,7 @@ import {useNavigation} from '@react-navigation/native';
 import Icon from './Icon';
 
 import {BLACK_COLOR_1} from '../../theme/colors';
+import {MAIN_PADDING} from '../../theme/sizes';
 
 // Define icons
 const icons = {
@@ -34,6 +35,9 @@ function IconBack() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    paddingLeft: MAIN_PADDING,
+  },
   icon: {
     color: BLACK_COLOR_1,
   },

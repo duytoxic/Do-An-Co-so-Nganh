@@ -10,7 +10,7 @@ function SlideProductDetailItem({imageSource}) {
       <View style={styles.container}>
         <FastImage
           style={styles.illustration}
-          source={imageSource}
+          source={{uri: imageSource.item}}
           resizeMode={FastImage.resizeMode.contain}
         />
       </View>
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
   },
   illustration: {
     height: 170,
-    width: WINDOW_WIDTH - BASE * 4,
+    width: WINDOW_WIDTH,
   },
 });
 

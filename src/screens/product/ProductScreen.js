@@ -1,5 +1,7 @@
-import React from 'react';
-import {StyleSheet, FlatList} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, FlatList, LogBox} from 'react-native';
+
+import firestore from '@react-native-firebase/firestore';
 
 import SafeAreaContainer from '../../components/common/SafeAreaContainer';
 import SearchBox from '../../components/common/SearchBox';
@@ -7,7 +9,7 @@ import TitlePage from '../../components/product/TitlePage';
 import Product from '../../components/common/Product';
 
 import {WHITE_COLOR} from '../../theme/colors';
-import {MAIN_PADDING} from '../../theme/sizes';
+import {MAIN_PADDING, BASE, WINDOW_WIDTH} from '../../theme/sizes';
 
 const icons = {
   search: {
@@ -22,30 +24,26 @@ const icons = {
   },
 };
 
-const DATA = [
-  {
-    name: 'Orenge Juice',
-    weight: 1,
-    price: 50000,
-    imageURL: require('../../../assets/images/product/test-product.png'),
-  },
-  {
-    name: 'Red Apple',
-    weight: 1,
-    price: 500000,
-    imageURL: require('../../../assets/images/product/test-product.png'),
-  },
-];
+function ProductScreen({route}) {
+  const [listProduct, setListProduct] = useState();
 
-function ProductScreen({routes}) {
+  useEffect(() => {
+    let list = [];
+    firestore()
+      .collection('products')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          list.push(doc.data());
+          setListProduct(list);
+        });
+      });
+  }, []);
+
   return (
     <>
       <SafeAreaContainer style={styles.container}>
-        <TitlePage
-          title="Đồ uống"
-          leftIcon={icons.marker}
-          rightIcon={icons.search}
-        />
+        <TitlePage title={route.params.data.name} leftIcon={icons.marker} />
         <SearchBox
           iconLeft={icons.search}
           iconRight={icons.cancel}
@@ -53,12 +51,22 @@ function ProductScreen({routes}) {
           style={styles.widthSearchBox}
         />
         <FlatList
-          numColumns={3}
-          data={DATA}
+          numColumns={2}
+          data={listProduct}
           columnWrapperStyle={styles.wrapper}
           showsVerticalScrollIndicator={false}
           renderItem={({item, index}) => {
-            return <Product index={index} />;
+            return (
+              <Product
+                id={item.id}
+                index={index}
+                price={item.price}
+                name={item.name}
+                imageURL={item.imageURL}
+                weight={item.weight}
+                desc={item.description}
+              />
+            );
           }}
           keyExtractor={(item, index) => index.toString()}
         />
@@ -71,6 +79,9 @@ const styles = StyleSheet.create({
   container: {
     paddingHorizontal: MAIN_PADDING,
     backgroundColor: WHITE_COLOR,
+  },
+  wrapper: {
+    width: WINDOW_WIDTH - MAIN_PADDING * 2,
   },
 });
 

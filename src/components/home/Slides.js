@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {View, Animated, StatusBar, StyleSheet, Dimensions} from 'react-native';
 
 // Components
@@ -6,10 +6,7 @@ import SlideItem from './SlideItem';
 import SafeAreaContainer from '../common/SafeAreaContainer';
 
 // Themes
-import {WHITE_COLOR, PRIMARY_COLOR} from '../../theme/colors';
-import {BASE, MAIN_PADDING, WINDOW_WIDTH} from '../../theme/sizes';
-
-import {useNavigation} from '@react-navigation/core';
+import {PRIMARY_COLOR} from '../../theme/colors';
 
 const DEFAULT_DATA = [
   {
@@ -32,8 +29,6 @@ const DEFAULT_DATA = [
 const {width} = Dimensions.get('window');
 
 function Slides() {
-  const navigation = useNavigation();
-
   const scrollX = useRef(new Animated.Value(0)).current;
 
   const onScroll = Animated.event(

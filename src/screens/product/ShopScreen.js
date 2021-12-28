@@ -1,11 +1,7 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
 
-import {
-  getListCategories,
-  selectListCategories,
-} from '../../reducers/categories';
+import firestore from '@react-native-firebase/firestore';
 
 import SafeAreaContainer from '../../components/common/SafeAreaContainer';
 import SearchBox from '../../components/common/SearchBox';
@@ -39,12 +35,20 @@ const icons = {
 };
 
 function ShopScreen() {
-  const dispatch = useDispatch();
-  const listCategories = useSelector(selectListCategories);
+  const [listCategories, setListCategories] = useState();
 
   useEffect(() => {
-    dispatch(getListCategories());
-  }, [dispatch]);
+    let listCat = [];
+    firestore()
+      .collection('categories')
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          listCat.push(doc.data());
+          setListCategories(listCat);
+        });
+      });
+  }, []);
 
   return (
     <>

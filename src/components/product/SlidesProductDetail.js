@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {View, Animated, StatusBar, StyleSheet, Dimensions} from 'react-native';
 
 // Components
@@ -6,15 +6,16 @@ import SlideProductDetailItem from '../product/SlideProductDetailItem';
 import SafeAreaContainer from '../common/SafeAreaContainer';
 
 // Themes
-import {WHITE_COLOR, PRIMARY_COLOR} from '../../theme/colors';
-import {BASE, MAIN_PADDING, WINDOW_WIDTH} from '../../theme/sizes';
-
-import {useNavigation} from '@react-navigation/core';
+import {PRIMARY_COLOR} from '../../theme/colors';
 
 const {width} = Dimensions.get('window');
 
 function Slides({slidesData}) {
-  const navigation = useNavigation();
+  let listSlide = [];
+
+  for (let i = 0; i < 3; i++) {
+    listSlide.push(slidesData);
+  }
 
   const scrollX = useRef(new Animated.Value(0)).current;
 
@@ -31,7 +32,7 @@ function Slides({slidesData}) {
     return (
       <>
         <View style={styles.dotContainer}>
-          {slidesData.map((item, idx) => {
+          {listSlide.map((item, idx) => {
             const opacity = dotPos.interpolate({
               inputRange: [idx - 1, idx, idx + 1],
               outputRange: [0.5, 1, 0.5],
@@ -63,18 +64,7 @@ function Slides({slidesData}) {
   };
 
   const renderItem = ({item}) => {
-    // console.log(item.imageMeta.url);
-    //Render DEFAULT
-    if (item.imageSource) {
-      return <SlideProductDetailItem {...item} />;
-    }
-    return (
-      <SlideProductDetailItem
-        title={item.title}
-        subTitle={item.body}
-        imageSource={{uri: item.imageMeta.url}}
-      />
-    );
+    return <SlideProductDetailItem imageSource={{item}} />;
   };
 
   return (
@@ -88,14 +78,14 @@ function Slides({slidesData}) {
       <SafeAreaContainer style={styles.container}>
         <Animated.FlatList
           horizontal
-          data={slidesData}
+          data={listSlide}
           pagingEnabled
           bounces={false}
           onScroll={onScroll}
           decelerationRate={0}
           renderItem={renderItem}
           scrollEventThrottle={16}
-          initialNumToRender={slidesData.length}
+          initialNumToRender={listSlide.length}
           showsHorizontalScrollIndicator={false}
           keyExtractor={(item, idx) => idx.toString()}
         />

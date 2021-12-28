@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -22,7 +22,7 @@ import MyText from '../../components/common/MyText';
 import LeftRightLayout from '../../layouts/LeftRightLayout';
 
 import {useDispatch} from 'react-redux';
-import {InCreaseQuantity} from '../../reducers/cart';
+import {InCreaseQuantity, DeCreaseQuantity} from '../../reducers/cart';
 
 const icons = {
   heart: {
@@ -49,7 +49,7 @@ import {
   GRAY_COLOR_2,
   WHITE_COLOR,
 } from '../../theme/colors';
-import {BASE, MAIN_PADDING} from '../../theme/sizes';
+import {BASE, MAIN_PADDING, WINDOW_WIDTH} from '../../theme/sizes';
 
 const DEFAULT_DATA = [
   {
@@ -69,22 +69,18 @@ const DEFAULT_DATA = [
   },
 ];
 
-const product = {
-  id: 9,
-  name: 'Red Apple',
-  price: 50000,
-  weight: '1kg',
-  quantity: 2,
-};
 function ProductDetailScreen({route}) {
+  const [numberItem, setNumberItem] = useState(1);
   const productInfo = {
     id: route.params.productId,
     name: route.params.productName,
     price: route.params.productPrice,
     weight: route.params.productWeight,
     desc: route.params.productDesc,
-    quantity: 1,
+    image: route.params.productImage,
+    quantity: numberItem,
   };
+
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const selectItem = item => {
@@ -93,6 +89,19 @@ function ProductDetailScreen({route}) {
       type: 'cart/addToCart',
       payload: {...item},
     });
+  };
+
+  const handleClickIncrease = () => {
+    setNumberItem(numberItem + 1);
+    dispatch(InCreaseQuantity(productInfo.id, numberItem));
+  };
+
+  const handleClickDecrease = () => {
+    setNumberItem(numberItem - 1);
+    if (numberItem === 1) {
+      setNumberItem(1);
+    }
+    dispatch(DeCreaseQuantity(productInfo.id, numberItem));
   };
 
   return (
@@ -105,7 +114,7 @@ function ProductDetailScreen({route}) {
       <SafeAreaContainer style={styles.container}>
         <View style={styles.productHeader}>
           <ButtonBack />
-          <SlidesProductDetail slidesData={DEFAULT_DATA} />
+          <SlidesProductDetail slidesData={productInfo.image} />
         </View>
         <ScrollView style={styles.productContent}>
           <View style={styles.productTitle}>
@@ -116,21 +125,23 @@ function ProductDetailScreen({route}) {
 
           <View style={styles.productPrice}>
             <View style={styles.selectNumber}>
-              <TouchableOpacity activeOpacity={0.6}>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => handleClickDecrease()}>
                 <Icon {...icons.dec} style={styles.dec} />
               </TouchableOpacity>
 
               <TextInput
                 underlineColorAndroid="transparent"
                 keyboardType="numeric"
-                value={productInfo.quantity.toString()}
+                value={numberItem.toString()}
                 editable={false}
                 style={styles.quantity}
               />
 
               <TouchableOpacity
                 activeOpacity={0.6}
-                onPress={() => dispatch(InCreaseQuantity(product.id))}>
+                onPress={() => handleClickIncrease()}>
                 <Icon {...icons.inc} style={styles.inc} />
               </TouchableOpacity>
             </View>
@@ -144,14 +155,15 @@ function ProductDetailScreen({route}) {
             // rightComp
           />
           <Text>{productInfo.desc}</Text>
-
+        </ScrollView>
+        <View style={styles.button}>
           <Button
             title="Thêm vào giỏ hàng"
             textTransform="uppercase"
             color={PRIMARY_COLOR}
             onPress={() => selectItem(productInfo)}
           />
-        </ScrollView>
+        </View>
       </SafeAreaContainer>
     </>
   );
@@ -162,7 +174,7 @@ const styles = StyleSheet.create({
     backgroundColor: WHITE_COLOR,
   },
   productHeader: {
-    paddingHorizontal: MAIN_PADDING,
+    // paddingHorizontal: MAIN_PADDING,
     paddingTop: BASE,
     height: 290,
     backgroundColor: GRAY_COLOR_2,
@@ -239,6 +251,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
     color: BLACK_COLOR_1,
+  },
+  button: {
+    width: WINDOW_WIDTH - 2 * MAIN_PADDING,
+    position: 'absolute',
+    bottom: BASE,
+    left: MAIN_PADDING,
+    right: MAIN_PADDING,
   },
 });
 

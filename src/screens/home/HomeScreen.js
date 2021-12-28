@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {StatusBar, ScrollView, StyleSheet} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/core';
@@ -8,7 +8,6 @@ import SearchBox from '../../components/common/SearchBox';
 import Slides from '../../components/home/Slides';
 import RecomendListPreview from '../../components/home/RecommendListPreview';
 import Button from '../../components/common/Button';
-import {AuthContext} from '../../context/AuthContext';
 
 // screens
 
@@ -44,7 +43,7 @@ function HomeScreen({}) {
 
   const DATA = [
     {
-      id: 3,
+      id: 'sp001',
       name: 'Organic Bananas',
       weight: '0.5kg',
       price: 20000,
@@ -52,7 +51,7 @@ function HomeScreen({}) {
       desc: 'Đây là một túi táo đỏ',
     },
     {
-      id: 9,
+      id: 'sp002',
       name: 'Red Apple',
       weight: '1kg',
       price: 500000,
@@ -60,7 +59,6 @@ function HomeScreen({}) {
       desc: 'Đây là một túi táo đỏ',
     },
   ];
-  const {logout} = useContext(AuthContext);
 
   return (
     <>
@@ -79,16 +77,8 @@ function HomeScreen({}) {
             style={styles.widthSearchBox}
           />
           <Slides />
-          <RecomendListPreview listProductRecommend={DATA} />
-          <RecomendListPreview listProductRecommend={DATA} />
-
-          <Button
-            arrowRight
-            title="đăng xuất"
-            textTransform="uppercase"
-            color={PRIMARY_COLOR}
-            onPress={() => logout()}
-          />
+          {/* <RecomendListPreview listProductRecommend={DATA} />
+          <RecomendListPreview listProductRecommend={DATA} /> */}
         </ScrollView>
       </SafeAreaView>
     </>
@@ -104,9 +94,6 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: 'center',
     justifyContent: 'center',
-  },
-  paddingContent: {
-    // paddingHorizontal: 30,
   },
   description: {
     fontSize: 20,

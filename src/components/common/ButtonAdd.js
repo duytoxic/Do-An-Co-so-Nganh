@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableOpacity, StyleSheet, TextBase} from 'react-native';
+import {TouchableOpacity, StyleSheet} from 'react-native';
 
 import Icon from './Icon';
 

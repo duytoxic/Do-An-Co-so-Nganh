@@ -1,6 +1,6 @@
 import React from 'react';
 import {StatusBar} from 'react-native';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 
 // Screens
 import HomeScreen from '../screens/home/HomeScreen';
@@ -20,9 +20,10 @@ const HomeNavigatior = () => {
     <>
       <StatusBar backgroundColor="transparent" barStyle={'dark-content'} />
       <Stack.Navigator
+        initialRouteName={HOME_SCREEN}
         screenOptions={{
           ...HIDDEN_HEADER,
-          ...TransitionPresets.SlideFromRightIOS,
+          // ...TransitionPresets.SlideFromRightIOS,
         }}>
         <Stack.Screen name={HOME_SCREEN} component={HomeScreen} />
         <Stack.Screen name={PRODUCT_SCREEN} component={ProductScreen} />

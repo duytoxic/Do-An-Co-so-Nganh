@@ -1,6 +1,9 @@
 import React, {useState} from 'react';
 import {View, StyleSheet, Dimensions, Text} from 'react-native';
 
+import {useSelector} from 'react-redux';
+import {selectItemInCart} from '../../reducers/cart';
+
 import {MAIN_SCREEN} from '../../navigations/screenName';
 
 import {WHITE_COLOR, BLACK_COLOR_1, PRIMARY_COLOR} from '../../theme/colors';
@@ -9,10 +12,11 @@ import BottomTab from './BottomTab';
 
 const {width} = Dimensions.get('screen');
 
-function TabBar({state, navigation, showTab}) {
+function TabBar({state, navigation, showTab, activeIndex}) {
   const [selected, setSelected] = useState(MAIN_SCREEN);
 
   const {routes} = state;
+  const listItemInCart = useSelector(selectItemInCart);
 
   const renderColor = currentTab => {
     return currentTab === selected ? PRIMARY_COLOR : BLACK_COLOR_1;
@@ -28,18 +32,31 @@ function TabBar({state, navigation, showTab}) {
       navigation.navigate(activeTab);
     }
   };
+
+  if (state.index === activeIndex) {
+  }
   return (
     <>
       {showTab && (
         <View style={styles.wrapper}>
           {routes.map((route, index) => (
-            <BottomTab
-              tab={route}
-              onPress={() => handlePress(route.name, index)}
-              bold={renderBold(route.name)}
-              color={renderColor(route.name)}
-              key={route.key}
-            />
+            <View key={route.key}>
+              <BottomTab
+                tab={route}
+                onPress={() => handlePress(route.name, index)}
+                bold={renderBold(route.name)}
+                color={renderColor(route.name)}
+              />
+              {route.name === 'cart' && listItemInCart.length ? (
+                <View style={styles.tabbarBadge}>
+                  <Text style={styles.tabbarBadgeText}>
+                    {listItemInCart.length}
+                  </Text>
+                </View>
+              ) : (
+                <></>
+              )}
+            </View>
           ))}
         </View>
       )}
@@ -69,6 +86,22 @@ const styles = StyleSheet.create({
     shadowRadius: 2.62,
 
     elevation: 4,
+  },
+  tabbarBadge: {
+    position: 'absolute',
+    top: 0,
+    right: 8,
+    backgroundColor: PRIMARY_COLOR,
+    width: 18,
+    height: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+  },
+  tabbarBadgeText: {
+    color: WHITE_COLOR,
+    fontSize: 12,
+    marginBottom: 1,
   },
 });
 

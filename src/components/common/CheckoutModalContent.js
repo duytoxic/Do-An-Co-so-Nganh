@@ -1,12 +1,11 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Alert} from 'react-native';
-
-import FastImage from 'react-native-fast-image';
+import {View, Text, StyleSheet, TouchableOpacity, Image} from 'react-native';
 
 import Icon from '../../components/common/Icon';
 import {useDispatch} from 'react-redux';
 
 import {removeCartItem} from '../../reducers/cart';
+import {AsyncStorageRemoveItem} from '../../utils/storage';
 
 const icons = {
   x: {
@@ -30,7 +29,6 @@ import {
   BLACK_COLOR_1,
   GRAY_COLOR_1,
   GRAY_COLOR_2,
-  PRIMARY_COLOR,
   WHITE_COLOR,
 } from '../../theme/colors';
 import {MAIN_PADDING} from '../../theme/sizes';
@@ -40,30 +38,19 @@ Number.prototype.format = function (n, x) {
   return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
 };
 
-function ItemInCart({id, name, weight, price, quantity, image}) {
+function ItemInCart({id, name, weight, price, quantity}) {
   const dispatch = useDispatch();
 
   let totalPrice = price * quantity;
-
-  const AlertConfirmDeleteItem = idItem =>
-    Alert.alert('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng', '', [
-      {
-        text: 'Hủy',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'colorPrimary',
-      },
-      {text: 'Xác nhận', onPress: () => dispatch(removeCartItem(idItem))},
-    ]);
 
   return (
     <>
       <View style={styles.listItems}>
         <View style={styles.itemInCart}>
           <View style={styles.itemImage}>
-            <FastImage
+            <Image
               style={styles.image}
-              source={{uri: image}}
-              resizeMode={FastImage.resizeMode.contain}
+              source={{uri: 'http://placeimg.com/640/480'}}
             />
           </View>
           <View style={styles.itemContent}>
@@ -75,16 +62,18 @@ function ItemInCart({id, name, weight, price, quantity, image}) {
               <TouchableOpacity
                 activeOpacity={0.6}
                 style={styles.iconDeleteContainer}
-                onPress={() => AlertConfirmDeleteItem(id)}>
+                onPress={() => dispatch(removeCartItem(id))}>
                 <Icon {...icons.x} style={styles.iconDelete} />
               </TouchableOpacity>
             </View>
             <View style={styles.itemContentBottom}>
               <View style={styles.selectNumber}>
-                <Text style={styles.quantity}>{quantity} sản phẩm</Text>
+                <Text style={styles.quantity}>
+                  {quantity} {quantity !== 1 ? 'items' : 'item'} in cart
+                </Text>
               </View>
               <Text style={styles.itemPrice}>
-                {Number(totalPrice).format()} đ
+                {Number(totalPrice).format()} VND
               </Text>
             </View>
           </View>
@@ -162,9 +151,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: BLACK_COLOR_1,
-  },
-  colorPrimary: {
-    color: PRIMARY_COLOR,
   },
 });
 

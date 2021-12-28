@@ -1,54 +1,147 @@
-import React from 'react';
-import {Text, StatusBar, StyleSheet, ScrollView} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  StatusBar,
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
+import RNModal from 'react-native-modal';
+import {useNavigation} from '@react-navigation/core';
+
+import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
 
 import SafeAreaContainer from '../../components/common/SafeAreaContainer';
-import Icon from '../../components/common/Icon';
 import Button from '../../components/common/Button';
-import MyText from '../../components/common/MyText';
 import TitlePage from '../../components/product/TitlePage';
 import ItemInCart from '../../components/common/ItemInCart';
-
-import {
-  selectItemInCart,
-  removeCartItem,
-  InCreaseQuantity,
-} from '../../reducers/cart';
-
-import {useSelector} from 'react-redux';
-
-const icons = {
-  x: {
-    name: 'x',
-    type: 'feather',
-    size: 28,
-  },
-  inc: {
-    name: 'add',
-    type: 'ionicons',
-    size: 28,
-  },
-  dec: {
-    name: 'minus',
-    type: 'entypo',
-    size: 28,
-  },
-};
+import CartEmpty from '../../components/common/CartEmpty';
+import OrderItem from '../../components/common/OrderItem';
 
 import {
   PRIMARY_COLOR,
-  BLACK_COLOR_1,
-  GRAY_COLOR_1,
   GRAY_COLOR_2,
   WHITE_COLOR,
+  BLACK_COLOR_1,
 } from '../../theme/colors';
-import {MAIN_PADDING} from '../../theme/sizes';
+import {BASE, MAIN_PADDING} from '../../theme/sizes';
 
-import {useDispatch} from 'react-redux';
+import {ORDER_COMPLETED_SCREEN} from '../../navigations/screenName';
 
-function ProductDetailScreen() {
+import {selectItemInCart, removeAllCart} from '../../reducers/cart';
+
+import {useSelector, useDispatch} from 'react-redux';
+
+const createThreeButtonAlert = () =>
+  Alert.alert(
+    'Thông báo',
+    'Bạn cần thêm sản phẩm vào giỏ hàng trước khi thanh toán',
+    [
+      {
+        text: 'Hủy',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'Đồng ý', onPress: () => console.log('OK Pressed')},
+    ],
+  );
+
+function CartScreen() {
+  const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
   const dispatch = useDispatch();
 
+  function onAuthStateChanged(e) {
+    setUser(e);
+    if (initializing) {
+      setInitializing(false);
+    }
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
+  });
+
+  Number.prototype.format = function (n, x) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+    return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+  };
+
   const listItemInCart = useSelector(selectItemInCart);
+
+  const total = listItemInCart
+    .map(item => item.price * item.quantity)
+    .reduce((prev, curr) => prev + curr, 0);
+
+  const totalVND = Number(total).format();
+
+  const handleCheckout = () => {
+    setModalVisible(true);
+  };
+
+  const onClose = () => {
+    setModalVisible(false);
+  };
+
+  const handleAddOrdersToFirebase = () => {
+    if (listItemInCart.length === 0) {
+      createThreeButtonAlert();
+    } else {
+      setLoading(true);
+      firestore()
+        .collection('orders')
+        .add({
+          items: listItemInCart,
+          totalPrice: totalVND,
+          createdAt: firestore.FieldValue.serverTimestamp(),
+          userId: user.uid,
+          orderId: '',
+        })
+        .then(() => {
+          setTimeout(() => {
+            setLoading(false);
+            navigation.navigate(ORDER_COMPLETED_SCREEN);
+            setModalVisible(false);
+          }, 2500);
+          if (__DEV__) {
+            console.log('Order added!');
+          }
+        });
+    }
+  };
+
+  const checkoutModalContent = () => {
+    return (
+      <View>
+        <View style={styles.modalCheckoutContainer}>
+          <View>
+            <Text style={styles.modalTitle}>Kiểm tra</Text>
+          </View>
+
+          <OrderItem leftText="Giao Hàng" rightText="Chọn phương thức" />
+          <OrderItem leftText="Giao Hàng" rightText="Chọn phương thức" />
+          <View style={styles.subtotalContainer}>
+            <Text style={styles.subtotalText}>Tổng tiền</Text>
+            <Text>{totalVND} VND</Text>
+          </View>
+
+          <Button
+            title="Thanh toán"
+            color={PRIMARY_COLOR}
+            onPress={handleAddOrdersToFirebase}
+          />
+        </View>
+      </View>
+    );
+  };
 
   return (
     <>
@@ -57,24 +150,50 @@ function ProductDetailScreen() {
         backgroundColor={GRAY_COLOR_2}
         barStyle={'dark-content'}
       />
+      <RNModal
+        statusBarTranslucent
+        useNativeDriverForBackdrop
+        propagateSwipe
+        isVisible={modalVisible}
+        swipeDirection={'down'}
+        onSwipeComplete={onClose}
+        style={styles.modalWrapper}
+        onBackdropPress={onClose}
+        backdropOpacity={0.2}>
+        {checkoutModalContent()}
+      </RNModal>
       <SafeAreaContainer style={styles.container}>
-        <TitlePage title="My Cart" />
+        <TitlePage title="Giỏ hàng của tôi" />
         <ScrollView>
-          {listItemInCart.length !== 0 ? (
+          {listItemInCart && listItemInCart.length !== 0 ? (
             listItemInCart.map((item, index) => {
-              return (
-                <ItemInCart key={index} {...item} quantity={item.quantity} />
-              );
+              return <ItemInCart key={index} {...item} />;
             })
           ) : (
-            <Text>Không có sản phẩm nào trong giỏ hàng</Text>
+            <CartEmpty
+              style={styles.cartEmpty}
+              text="Không có sản phẩm nào trong giỏ hàng"
+            />
           )}
         </ScrollView>
-        <Button
-          title="Go to Checkout"
-          textTransform="uppercase"
-          color={PRIMARY_COLOR}
-        />
+        <View style={styles.button}>
+          <Button
+            title="Kiểm tra"
+            // textTransform="uppercase"
+            color={PRIMARY_COLOR}
+            textRight={totalVND.toString()}
+            onPress={() => handleCheckout()}
+          />
+        </View>
+        {loading ? (
+          <>
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color={PRIMARY_COLOR} />
+            </View>
+          </>
+        ) : (
+          <></>
+        )}
       </SafeAreaContainer>
     </>
   );
@@ -84,83 +203,49 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: WHITE_COLOR,
   },
-  listItems: {
+  button: {
     paddingHorizontal: MAIN_PADDING,
+    marginBottom: BASE,
   },
-  itemInCart: {
-    flexDirection: 'row',
-    paddingVertical: 20,
-    borderBottomWidth: 1,
-    borderColor: GRAY_COLOR_2,
+  modalWrapper: {
+    justifyContent: 'flex-end',
+    margin: 0,
   },
-  itemImage: {
-    flex: 3,
-    justifyContent: 'center',
-    alignItems: 'center',
+  modalCheckoutContainer: {
+    backgroundColor: WHITE_COLOR,
+    padding: MAIN_PADDING,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
   },
-  image: {
-    width: 64,
-    height: 64,
-  },
-  itemContent: {
-    flex: 7,
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  itemContentTop: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  itemContentBottom: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  selectNumber: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  iconContainer: {
-    borderWidth: 1,
-    borderColor: GRAY_COLOR_2,
-    width: 40,
-    height: 40,
-    borderRadius: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  inc: {
-    color: PRIMARY_COLOR,
-  },
-  dec: {
-    color: GRAY_COLOR_1,
-  },
-  quantity: {
-    textAlign: 'center',
+  modalTitle: {
+    color: BLACK_COLOR_1,
+    fontWeight: 'bold',
     fontSize: 18,
-    marginHorizontal: 3,
-    color: BLACK_COLOR_1,
   },
-  nameItem: {
-    color: BLACK_COLOR_1,
+  subtotalContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 15,
+  },
+  subtotalText: {
+    textAlign: 'left',
     fontWeight: '600',
     fontSize: 15,
-  },
-  weightItem: {
-    color: GRAY_COLOR_1,
-    fontSize: 13,
-  },
-  iconDelete: {
-    color: GRAY_COLOR_1,
-  },
-  itemPrice: {
-    fontSize: 16,
-    fontWeight: '600',
     color: BLACK_COLOR_1,
+  },
+  content: {
+    backgroundColor: WHITE_COLOR,
+    height: 500,
+  },
+  loadingContainer: {
+    backgroundColor: '000',
+    position: 'absolute',
+    opacity: 0.6,
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+    width: '100%',
   },
 });
 
-export default ProductDetailScreen;
+export default CartScreen;
