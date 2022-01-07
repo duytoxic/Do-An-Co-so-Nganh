@@ -13,6 +13,7 @@ import {useNavigation} from '@react-navigation/core';
 
 import firestore from '@react-native-firebase/firestore';
 import auth from '@react-native-firebase/auth';
+import {v5 as uuidv5} from 'uuid';
 
 import SafeAreaContainer from '../../components/common/SafeAreaContainer';
 import Button from '../../components/common/Button';
@@ -31,9 +32,9 @@ import {BASE, MAIN_PADDING} from '../../theme/sizes';
 
 import {ORDER_COMPLETED_SCREEN} from '../../navigations/screenName';
 
-import {selectItemInCart, removeAllCart} from '../../reducers/cart';
+import {selectItemInCart} from '../../reducers/cart';
 
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 
 const createThreeButtonAlert = () =>
   Alert.alert(
@@ -55,8 +56,6 @@ function CartScreen() {
   const [loading, setLoading] = useState(false);
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
-
-  const dispatch = useDispatch();
 
   function onAuthStateChanged(e) {
     setUser(e);
@@ -91,6 +90,17 @@ function CartScreen() {
     setModalVisible(false);
   };
 
+  function uuid() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(
+      /[xy]/g,
+      function (c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == 'x' ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      },
+    );
+  }
+
   const handleAddOrdersToFirebase = () => {
     if (listItemInCart.length === 0) {
       createThreeButtonAlert();
@@ -103,7 +113,7 @@ function CartScreen() {
           totalPrice: totalVND,
           createdAt: firestore.FieldValue.serverTimestamp(),
           userId: user.uid,
-          orderId: '',
+          orderId: uuid(),
         })
         .then(() => {
           setTimeout(() => {
@@ -127,10 +137,9 @@ function CartScreen() {
           </View>
 
           <OrderItem leftText="Giao Hàng" rightText="Chọn phương thức" />
-          <OrderItem leftText="Giao Hàng" rightText="Chọn phương thức" />
           <View style={styles.subtotalContainer}>
             <Text style={styles.subtotalText}>Tổng tiền</Text>
-            <Text>{totalVND} VND</Text>
+            <Text>{totalVND} đ</Text>
           </View>
 
           <Button
@@ -179,7 +188,6 @@ function CartScreen() {
         <View style={styles.button}>
           <Button
             title="Kiểm tra"
-            // textTransform="uppercase"
             color={PRIMARY_COLOR}
             textRight={totalVND.toString()}
             onPress={() => handleCheckout()}

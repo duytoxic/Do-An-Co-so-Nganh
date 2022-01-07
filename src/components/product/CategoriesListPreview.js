@@ -15,7 +15,6 @@ const getRandomColor = () => {
 };
 
 function CategoriesListPreview({items}) {
-  // console.log(items);
   const navigation = useNavigation();
   return (
     <>

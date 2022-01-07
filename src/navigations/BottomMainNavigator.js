@@ -8,6 +8,7 @@ import BottomTabBar from '../components/navigator/BottomTabBar';
 //naivgators
 import HomeNavigatior from './HomeNavigator';
 import AccountNavigator from './AccountNavigator';
+import ShopNavigator from './ShopNavigator';
 
 //screens
 import ShopScreen from '../screens/product/ShopScreen';
@@ -15,9 +16,9 @@ import CartScreen from '../screens/cart/CartScreen';
 
 import {
   MAIN_SCREEN,
-  SHOP_SCREEN,
-  CART_SCREEN,
+  SHOP_NAVIGATOR_SCREEN,
   ACCOUNT_NAVIGATOR_SCREEN,
+  CART_NAVIGATOR_SCREEN,
 } from './screenName';
 
 const Tab = createBottomTabNavigator();
@@ -54,8 +55,8 @@ const MainNavigator = () => {
             iconType: 'ant-design',
             iconSize: 23,
           }}
-          name={SHOP_SCREEN}
-          component={ShopScreen}
+          name={SHOP_NAVIGATOR_SCREEN}
+          component={ShopNavigator}
         />
         <Tab.Screen
           initialParams={{
@@ -64,7 +65,7 @@ const MainNavigator = () => {
             iconType: 'ant-design',
             iconSize: 23,
           }}
-          name={CART_SCREEN}
+          name={CART_NAVIGATOR_SCREEN}
           component={CartScreen}
         />
         <Tab.Screen

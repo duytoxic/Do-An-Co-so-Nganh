@@ -47,16 +47,6 @@ const icons = {
     name: 'x-circle',
     size: 22,
   },
-  facebook: {
-    type: 'font-awesome-5',
-    name: 'facebook-f',
-    size: 22,
-  },
-  google: {
-    type: 'font-awesome-5',
-    name: 'google',
-    size: 22,
-  },
 };
 
 function LoginScreen() {
@@ -64,6 +54,19 @@ function LoginScreen() {
   const navigation = useNavigation();
 
   const {login} = useContext(AuthContext);
+
+  const validate = (values, props) => {
+    const errors = {};
+
+    if (!values.email) {
+      errors.email = 'Required';
+    } else if (
+      !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+    ) {
+      errors.email = 'Invalid email address';
+    }
+    return errors;
+  };
 
   return (
     <>

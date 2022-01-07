@@ -62,7 +62,7 @@ function Button({
         )}
         {textRight && (
           <View style={styles.totalPrice}>
-            <Text style={styles.textTotalPrice}>{textRight} VND</Text>
+            <Text style={styles.textTotalPrice}>{textRight} đ</Text>
           </View>
         )}
       </TouchableOpacity>

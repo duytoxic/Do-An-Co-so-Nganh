@@ -1,15 +1,21 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, FlatList, LogBox} from 'react-native';
+import {
+  StyleSheet,
+  FlatList,
+  View,
+  Text,
+  ActivityIndicator,
+} from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
 
 import SafeAreaContainer from '../../components/common/SafeAreaContainer';
 import SearchBox from '../../components/common/SearchBox';
-import TitlePage from '../../components/product/TitlePage';
 import Product from '../../components/common/Product';
+import IconBack from '../../components/common/ButtonBack';
 
-import {WHITE_COLOR} from '../../theme/colors';
-import {MAIN_PADDING, BASE, WINDOW_WIDTH} from '../../theme/sizes';
+import {WHITE_COLOR, BLACK_COLOR_1, PRIMARY_COLOR} from '../../theme/colors';
+import {MAIN_PADDING, WINDOW_WIDTH} from '../../theme/sizes';
 
 const icons = {
   search: {
@@ -26,24 +32,35 @@ const icons = {
 
 function ProductScreen({route}) {
   const [listProduct, setListProduct] = useState();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let list = [];
+    setLoading(true);
     firestore()
       .collection('products')
+      .where('catId', '==', route.params.data.catId)
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
           list.push(doc.data());
-          setListProduct(list);
         });
+        setTimeout(() => {
+          setListProduct(list);
+          setLoading(false);
+        }, 500);
       });
-  }, []);
+  }, [route.params.data.catId]);
 
   return (
     <>
       <SafeAreaContainer style={styles.container}>
-        <TitlePage title={route.params.data.name} leftIcon={icons.marker} />
+        <View style={styles.header}>
+          <IconBack styleIcon={styles.headerLeftIcon} />
+          <View style={styles.headerTitle}>
+            <Text style={styles.title}>{route.params.data.name}</Text>
+          </View>
+        </View>
         <SearchBox
           iconLeft={icons.search}
           iconRight={icons.cancel}
@@ -70,6 +87,17 @@ function ProductScreen({route}) {
           }}
           keyExtractor={(item, index) => index.toString()}
         />
+        <View style={styles.loadingContainer}>
+          {loading ? (
+            <>
+              <View style={styles.loading}>
+                <ActivityIndicator size="large" color={PRIMARY_COLOR} />
+              </View>
+            </>
+          ) : (
+            <></>
+          )}
+        </View>
       </SafeAreaContainer>
     </>
   );
@@ -77,11 +105,43 @@ function ProductScreen({route}) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: MAIN_PADDING,
     backgroundColor: WHITE_COLOR,
   },
   wrapper: {
     width: WINDOW_WIDTH - MAIN_PADDING * 2,
+    marginHorizontal: MAIN_PADDING,
+  },
+  widthSearchBox: {
+    width: WINDOW_WIDTH - 2 * MAIN_PADDING,
+    marginLeft: MAIN_PADDING,
+  },
+  header: {
+    height: 50,
+  },
+  headerTitle: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerLeftIcon: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  title: {
+    fontSize: 19,
+    fontWeight: '700',
+    color: BLACK_COLOR_1,
+  },
+  loadingContainer: {
+    flex: 1,
   },
 });
 

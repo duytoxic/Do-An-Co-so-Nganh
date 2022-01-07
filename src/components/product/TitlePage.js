@@ -18,17 +18,7 @@ function TitlePage({leftIcon: LeftComp, title, rightIcon = null, style}) {
   return (
     <>
       <View style={[styles.container, style]}>
-        <View style={styles.left}>
-          {/* {leftIcon && (
-            <Icon
-              type={leftIcon.type}
-              name={leftIcon.name}
-              size={leftIcon.size}
-              style={styles.iconColor}
-            />
-          )} */}
-          {LeftComp && <LeftComp />}
-        </View>
+        <View style={styles.left}>{LeftComp && <LeftComp />}</View>
 
         <View style={styles.titlePage}>
           <Text style={styles.title}>{title}</Text>
@@ -51,7 +41,7 @@ function TitlePage({leftIcon: LeftComp, title, rightIcon = null, style}) {
 
 const styles = StyleSheet.create({
   container: {
-    height: 40,
+    height: 50,
   },
   titlePage: {
     position: 'absolute',

@@ -16,7 +16,7 @@ const icons = {
   },
 };
 
-function IconBack() {
+function IconBack({styleIcon}) {
   const navigation = useNavigation();
 
   const onPress = () => {
@@ -27,7 +27,7 @@ function IconBack() {
   return (
     <TouchableOpacity
       activeOpacity={0.6}
-      style={styles.container}
+      style={[styles.container, styleIcon]}
       onPress={onPress}>
       <Icon {...icons.chevronLeft} style={styles.icon} />
     </TouchableOpacity>

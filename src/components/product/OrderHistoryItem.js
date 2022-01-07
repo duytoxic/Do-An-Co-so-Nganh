@@ -25,7 +25,13 @@ import {
 } from '../../theme/colors';
 import {BASE, MAIN_PADDING} from '../../theme/sizes';
 
-function OrderHistoryItem({timeOrder, totalPrice, products, onLongPress}) {
+function OrderHistoryItem({
+  orderId,
+  timeOrder,
+  totalPrice,
+  products,
+  onLongPress,
+}) {
   const ItemOrdered = ({name, quantity, price}) => {
     return (
       <View style={styles.item}>
@@ -46,7 +52,7 @@ function OrderHistoryItem({timeOrder, totalPrice, products, onLongPress}) {
         activeOpacity={0.7}>
         <View style={styles.itemHeader}>
           <View>
-            <Text style={styles.orderdId}>Đơn #123</Text>
+            <Text style={styles.orderdId}>Đơn #100</Text>
             <View style={styles.orderPlace}>
               <Icon style={styles.iconShiping} {...icons.shiping} />
               <Text>Nhận hàng tại nhà</Text>

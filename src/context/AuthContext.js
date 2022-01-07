@@ -19,7 +19,11 @@ export const AuthProvider = ({children}) => {
             }
             await auth().signInWithEmailAndPassword(email, password);
           } catch (e) {
-            console.log(e);
+            if (e.code === 'auth/invalid-email') {
+              Alert.alert('Email không hợp lệ');
+            } else {
+              Alert.alert(e.code);
+            }
           }
         },
         register: async (email, password) => {

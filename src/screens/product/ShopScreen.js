@@ -45,19 +45,15 @@ function ShopScreen() {
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
           listCat.push(doc.data());
-          setListCategories(listCat);
         });
+        setListCategories(listCat);
       });
   }, []);
 
   return (
     <>
       <SafeAreaContainer style={styles.container}>
-        <TitlePage
-          title="Cửa hàng"
-          // leftIcon={icons.marker}
-          // rightIcon={icons.search}
-        />
+        <TitlePage title="Cửa hàng" />
         <SearchBox
           iconLeft={icons.search}
           iconRight={icons.cancel}

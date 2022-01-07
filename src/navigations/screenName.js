@@ -83,3 +83,8 @@ export const ACCOUNT_NAVIGATOR_SCREEN = 'account_navigator';
  * Màn hình cart navigator
  */
 export const CART_NAVIGATOR_SCREEN = 'cart_navigator';
+
+/**
+ * Màn hình shop navigator
+ */
+export const SHOP_NAVIGATOR_SCREEN = 'shop_navigator';

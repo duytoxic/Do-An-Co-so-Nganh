@@ -51,24 +51,6 @@ import {
 } from '../../theme/colors';
 import {BASE, MAIN_PADDING, WINDOW_WIDTH} from '../../theme/sizes';
 
-const DEFAULT_DATA = [
-  {
-    title: 'Fresh Vegetables',
-    subTitle: 'Get Up to 40% OFF',
-    imageSource: require('../../../assets/images/product/red-apple-2x.png'),
-  },
-  {
-    title: 'Tiêu đề quảng cáo',
-    subTitle: 'Get Up to 40% OFF',
-    imageSource: require('../../../assets/images/product/red-apple-2x.png'),
-  },
-  {
-    title: 'Fresh Vegetables',
-    subTitle: 'Nội dung quảng cáo',
-    imageSource: require('../../../assets/images/intro/health-img.jpg'),
-  },
-];
-
 function ProductDetailScreen({route}) {
   const [numberItem, setNumberItem] = useState(1);
   const productInfo = {
@@ -145,7 +127,7 @@ function ProductDetailScreen({route}) {
                 <Icon {...icons.inc} style={styles.inc} />
               </TouchableOpacity>
             </View>
-            <Text style={styles.price}>{productInfo.price} VND</Text>
+            <Text style={styles.price}>{productInfo.price} đ</Text>
           </View>
           <Hr />
           <LeftRightLayout

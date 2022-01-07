@@ -13,6 +13,7 @@ import BottomTab from './BottomTab';
 const {width} = Dimensions.get('screen');
 
 function TabBar({state, navigation, showTab, activeIndex}) {
+  // console.log(activeIndex);
   const [selected, setSelected] = useState(MAIN_SCREEN);
 
   const {routes} = state;
@@ -47,7 +48,7 @@ function TabBar({state, navigation, showTab, activeIndex}) {
                 bold={renderBold(route.name)}
                 color={renderColor(route.name)}
               />
-              {route.name === 'cart' && listItemInCart.length ? (
+              {route.name === 'cart_navigator' && listItemInCart.length ? (
                 <View style={styles.tabbarBadge}>
                   <Text style={styles.tabbarBadgeText}>
                     {listItemInCart.length}
